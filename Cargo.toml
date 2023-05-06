@@ -11,4 +11,4 @@ license = "MIT"
 
 [dependencies]
 etherparse = "0.13.0"
-socket2 = "0.5.2"
+socket2 = { version = "0.5.2", features = [ "all" ] }
