@@ -2,7 +2,13 @@
 name = "pongd"
 version = "0.1.0"
 edition = "2021"
+authors = ["Mark Ghebrial"]
+description = "A daemon for responding to ICMP pings"
+readme = "README.md"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+etherparse = "0.13.0"
+socket2 = "0.5.2"
