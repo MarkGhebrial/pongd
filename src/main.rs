@@ -21,6 +21,8 @@ fn open_socket() -> Socket {
 fn main() {
     let mut socket = open_socket();
 
+    println!("Listening for pings...");
+
     let mut buf = [0u8; 4096];
 
     loop {
@@ -37,9 +39,14 @@ fn main() {
         )
         .unwrap();
 
+        // Respond to echo requests
         match incoming_icmp_packet.icmp_type() {
             Icmpv4Type::EchoRequest(header) => {
-                println!("THAT'S AN ECHO REQUEST!!! {:?}", header);
+                println!(
+                    "Recieved an echo request from {} with {} bytes of data",
+                    Ipv4Addr::from(incoming_ip_header.source()),
+                    incoming_icmp_packet.slice().len()
+                );
 
                 // Create the outgoing ICMP header
                 let mut outgoing_icmp_header =
@@ -72,9 +79,7 @@ fn main() {
                     .unwrap();
                 socket.flush().unwrap();
             }
-            t => println!("{:?}", t),
+            _ => (),
         }
-
-        println!("");
     }
 }
