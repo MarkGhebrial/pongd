@@ -1,15 +1,7 @@
+use etherparse::{IcmpEchoHeader, Icmpv4Header, Icmpv4Slice, Icmpv4Type, Ipv4HeaderSlice};
 use socket2::{Domain, Protocol, SockAddr, Socket, Type};
-use std::io::Cursor;
-use std::io::Read;
-use std::io::Write;
+use std::io::{Cursor, Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4};
-
-use std::fs::File;
-
-use etherparse::Ipv4HeaderSlice;
-use etherparse::{
-    IcmpEchoHeader, Icmpv4Header, Icmpv4Slice, Icmpv4Type, Icmpv6Type, IpNumber, Ipv4Header,
-};
 
 fn open_socket() -> Socket {
     // Create the ICMP socket
