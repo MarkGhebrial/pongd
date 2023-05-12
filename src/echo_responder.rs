@@ -1,9 +1,9 @@
-use bytes::buf::BufMut;
-use bytes::{Bytes, BytesMut};
 use etherparse::{IcmpEchoHeader, Icmpv4Header, Icmpv4Slice, Icmpv4Type, Ipv4HeaderSlice};
 use socket2::{SockAddr, Socket};
 use std::io::{Read, Write};
 use std::net::{Ipv4Addr, SocketAddrV4};
+use bytes::{Bytes, BytesMut};
+use bytes::buf::BufMut;
 
 use crate::MyError;
 
@@ -14,10 +14,7 @@ pub struct Icmpv4EchoResponder {
 
 impl Icmpv4EchoResponder {
     pub fn new(socket: Socket) -> Self {
-        Self {
-            socket,
-            buffer: Bytes::new(),
-        }
+        Self { socket, buffer: Bytes::new() }
     }
 
     /// Blocks until the socket returns an IP packet
@@ -55,6 +52,7 @@ impl Icmpv4EchoResponder {
                 outgoing_icmp_header.update_checksum(&incoming_icmp_packet.payload());
 
                 // Create a buffer for the outgoing packet
+                //let mut buffer: Cursor<Box<[u8]>> = Cursor::new(Box::new([0; 4098]));
                 let buffer = BytesMut::with_capacity(4098);
                 let mut writer = buffer.writer();
 

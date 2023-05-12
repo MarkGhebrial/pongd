@@ -1,7 +1,5 @@
 use socket2::{Domain, Protocol, Socket, Type};
-use daemonize::Daemonize;
 use std::io;
-use std::fs::File;
 
 mod err;
 use err::MyError;
@@ -20,30 +18,15 @@ fn open_socket() -> io::Result<Socket> {
 }
 
 fn main() {
-    let stdout = File::create("/tmp/pong.out").unwrap();
-    let stderr = File::create("/tmp/pong.err").unwrap();
+    let socket = open_socket().expect("Could not open socket");
 
-    let daemonize = Daemonize::new()
-        .user("nobody")
-        .group("daemon")
-        .group(2)
-        .umask(0o777)
-        .stdout(stdout)
-        .stderr(stderr)
-        .privileged_action(|| open_socket().expect("Could not open socket"));
+    println!("Listening for pings...");
 
-    match daemonize.start() {
-        Ok(socket) => {
-            println!("Listening for pings...");
+    let mut echo_responder = Icmpv4EchoResponder::new(socket);
 
-            let mut echo_responder = Icmpv4EchoResponder::new(socket);
-
-            loop {
-                if let Err(e) = echo_responder.run() {
-                    println!("Encountered an error: {}", e);
-                }
-            }
-        },
-        Err(e) => eprintln!("Error, {}", e),
+    loop {
+        if let Err(e) = echo_responder.run() {
+            println!("Encountered an error: {}", e);
+        }
     }
 }
