@@ -2,8 +2,6 @@ use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::io;
 
-//use etherparse::WriteError;
-
 #[derive(Debug)]
 pub enum MyError {
     NotAnEchoRequest,
