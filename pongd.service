@@ -1,0 +1,12 @@
+[Unit]
+Description=Daemon for respoding to IMCP pings
+After=network.target
+
+[Service]
+Type=forking
+Restart=always
+#ExecStart=/usr/local/bin/pongd
+ExecStart=/home/markg/Documents/Code/pongd/target/release/pongd
+
+[Install]
+WantedBy=multi-user.target
