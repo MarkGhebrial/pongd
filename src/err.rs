@@ -1,14 +1,15 @@
-use std::io;
 use std::error::Error;
-use std::fmt::{Display, Formatter, self};
+use std::fmt::{self, Display, Formatter};
+use std::io;
 
-use etherparse::WriteError;
+//use etherparse::WriteError;
 
 #[derive(Debug)]
 pub enum MyError {
     NotAnEchoRequest,
     IoErr(io::Error),
-    WriteError(WriteError),
+    WriteError(etherparse::WriteError),
+    ReadError(etherparse::ReadError),
 }
 
 impl Error for MyError {}
@@ -25,8 +26,14 @@ impl From<io::Error> for MyError {
     }
 }
 
-impl From<WriteError> for MyError {
-    fn from(e: WriteError) -> Self {
+impl From<etherparse::WriteError> for MyError {
+    fn from(e: etherparse::WriteError) -> Self {
         MyError::WriteError(e)
+    }
+}
+
+impl From<etherparse::ReadError> for MyError {
+    fn from(e: etherparse::ReadError) -> Self {
+        MyError::ReadError(e)
     }
 }
