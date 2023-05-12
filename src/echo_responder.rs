@@ -69,7 +69,6 @@ impl Icmpv4EchoResponder {
 
     pub fn run(&mut self) -> Result<(), MyError> {
         self.get_packet()?;
-        //dbg!(&self.buffer);
 
         // Parse the IP header
         let ip_header = Ipv4HeaderSlice::from_slice(&self.buffer)?;
